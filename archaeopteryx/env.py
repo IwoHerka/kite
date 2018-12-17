@@ -1,44 +1,43 @@
 class Environment:
-    def __init__(self, names=None, parent=None):
-        self.names = names or {}
-        self.parent = parent
+    def __init__(self):
+        self.stack = [{}]
+        self.index = 0
 
-    def set(self, name, val):
+    def set(self, name, val, i=None):
         """
         Assign value to a name. By default, names will be
         stored in the lowest scope possible.
         """
-        # To avoid uncesessary stack traversal,
-        # always check if name is available locally first.
-        if name in self.names:
-            self.names[name] = val
-        # Only if not, check the parent.
-        elif self.parent:
-            self.parent.set(name, val)
-        # Finally, if name is unknown, assign it
-        # at the current level.
-        else:
-            self.names[name] = val
+        i = i if i != None else self.index
 
-    def get(self, name):
+        if name in self.stack[i]:
+            self.stack[i][name] = val
+        elif i > 0:
+            self.set(name, val, i - 1)
+        else:
+            self.stack[i][name] = val
+
+    def get(self, name, i=None):
         """
         Try to retrieve value for the specified name.
         If not available in the current scope, search in parent.
         """
-        if name in self.names:
-            return self.names[name]
-        elif self.parent:
-            return self.parent.get(name)
+        i = i if i != None else self.index
+
+        if name in self.stack[i]:
+            return self.stack[i][name]
+        elif i > 0:
+            return self.get(name, i - 1)
         else:
             raise NameError(
                 "symbol '{}' is not defined"
                 .format(name)
             )
 
-    def push(self, names=None):
-        """Create new scope with current enviornment as parent."""
-        return Environment(name, parent=self)
+    def push(self, bindings=None):
+        self.index += 1
+        self.stack.append(bindings or {})
 
     def pop(self):
-        """Return previous scope."""
-        return self.parent
+        self.index -= 1
+        self.stack.pop()
