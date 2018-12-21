@@ -1,11 +1,64 @@
-from archaeopteryx.symbol import *
+import pytest
+
+from hypothesis import given
+from hypothesis.strategies import *
+
+from archaeopteryx.symbol import Symbol, T, F, NIL
+from archaeopteryx.list import List
 
 
-def test_symbol_uniqueness():
-    t = Symbol('t')
-    f = Symbol('f')
+@composite
+def anything_except_string(draw):
+    return draw(
+          builds(object)
+        | builds(list)
+        | builds(tuple)
+        | builds(dict)
+        | builds(set)
+        | builds(int)
+        | builds(float)
+    )
 
-    assert not (t is f)
-    assert t != f
-    assert t == Symbol('t')
-    assert t is Symbol('t')
+
+@composite
+def two_different_names(draw):
+    return draw(text()), draw(text()) + '.'
+
+
+@given(lists(text(), min_size=1))
+def test_cannot_construct_symbol_with_more_than_one_argument(args):
+    with pytest.raises(TypeError):
+        Symbol(str(), *args)
+
+
+@given(anything_except_string())
+def test_symbol_name_must_be_string(name):
+    with pytest.raises(TypeError):
+        Symbol(name)
+
+
+@given(text())
+def test_two_symbols_with_same_names_are_the_same(name):
+    assert Symbol(name) == Symbol(name)
+    assert Symbol(name) is Symbol(name)
+    assert hash(Symbol(name)) == hash(Symbol(name))
+
+
+@given(two_different_names())
+def test_two_symbols_with_different_names_are_different(names):
+    first, second = names
+    assert Symbol(first) != Symbol(second)
+    assert not Symbol(first) is Symbol(second)
+    assert hash(Symbol(first)) != hash(Symbol(second))
+
+
+def test_T_is_a_symbol():
+    assert T == Symbol('t')
+
+
+def test_F_is_empty_list():
+    assert F == List()
+
+
+def test_NIL_is_a_symbol():
+    assert NIL == Symbol('NIL')
