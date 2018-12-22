@@ -1,6 +1,11 @@
 from __future__ import print_function
 
+import sys
 from . import lisp
 
-print(lisp.USAGE)
-lisp.repl()
+
+if len(sys.argv) > 1 and sys.argv[1] in ('-h', '--help'):
+    print(lisp.USAGE)
+else:
+    print(lisp.WELCOME_MSG)
+    lisp.repl()
