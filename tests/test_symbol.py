@@ -22,7 +22,8 @@ def anything_except_string(draw):
 
 @composite
 def two_different_names(draw):
-    return draw(text()), draw(text()) + '.'
+    name = draw(text())
+    return name, name + '.'
 
 
 @given(lists(text(), min_size=1))
