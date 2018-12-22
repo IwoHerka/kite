@@ -4,7 +4,15 @@ from .list import List
 class Symbol(int):
     symbols = {}
 
-    def __new__(cls, name, doc=None, canonical=None):
+    def __new__(cls, name, **kwargs):
+        if not isinstance(name, str):
+            raise TypeError(
+                'Symbol name must be a string, got: {}'
+                .format(name)
+            )
+
+        doc = kwargs.get('doc', None)
+        canonical = kwargs.get('canonical', None)
         s = cls.symbols.get(name)
         canonical = canonical or hash(name)
 
@@ -21,6 +29,11 @@ class Symbol(int):
         return self.name
 
     def eval(self, env, args=None):
+        if args != None:
+            raise TypeError(
+                "Cannot apply '{}' to symbol '{}'"
+                .format(args, self.name)
+            )
         # Evaluation of a symbol is just
         # look-up of the value it refers to.
         return env.get(self.name)
@@ -28,3 +41,4 @@ class Symbol(int):
 
 T = Symbol('t')
 F = List()
+NIL = Symbol('NIL')
