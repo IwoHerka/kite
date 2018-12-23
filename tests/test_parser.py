@@ -1,6 +1,6 @@
-from archaeopteryx.symbol import T, F, NIL, Symbol as S
-from archaeopteryx.parser import Parser
-from archaeopteryx.list import List as L
+from kite.symbol import T, F, NIL, Symbol as S
+from kite.parser import Parser
+from kite.list import List as L
 
 
 def parse(string):

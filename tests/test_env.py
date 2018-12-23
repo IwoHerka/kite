@@ -1,4 +1,4 @@
-from archaeopteryx.env import Environment
+from kite.env import Environment
 
 
 def test_env_set_get():

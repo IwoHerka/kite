@@ -3,8 +3,8 @@ import pytest
 from hypothesis import given
 from hypothesis.strategies import *
 
-from archaeopteryx.symbol import Symbol, T, F, NIL
-from archaeopteryx.list import List
+from kite.symbol import Symbol, T, F, NIL
+from kite.list import List
 
 
 @composite

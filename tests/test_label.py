@@ -3,10 +3,10 @@ import pytest
 from hypothesis import given
 from hypothesis.strategies import *
 
-from archaeopteryx.symbol import Symbol as S, T, F, NIL
-from archaeopteryx.fn import label
-from archaeopteryx import lisp
-from archaeopteryx.list import List
+from kite.symbol import Symbol as S, T, F, NIL
+from kite.fn import label
+from kite import lisp
+from kite.list import List
 
 
 @given(just(lisp.get_environment()), text())

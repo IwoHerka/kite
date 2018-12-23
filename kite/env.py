@@ -1,6 +1,6 @@
 class Environment:
-    def __init__(self):
-        self.stack = [{}]
+    def __init__(self, bindings=None):
+        self.stack = [bindings or {}]
         self.index = 0
 
     def set(self, name, val, i=None):
@@ -41,3 +41,9 @@ class Environment:
     def pop(self):
         self.index -= 1
         self.stack.pop()
+
+    def show(self, exclude=None, include=None):
+        for s in self.stack:
+            for n, v in s.items():
+                if (not include or n in include) and not (exclude and n in exclude):
+                    print('    {} - {}'.format(n, v))

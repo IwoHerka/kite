@@ -1,4 +1,4 @@
-from archaeopteryx.list import List
+from kite.list import List
 
 
 def test_list_len():
