@@ -38,6 +38,9 @@ class Symbol(int):
         # look-up of the value it refers to.
         return env.get(self.name)
 
+    def cons(self, arg):
+        return List(arg, self)
+
 
 T = Symbol('t')
 F = List()

@@ -86,7 +86,7 @@ def cons(env, args):
             .format(args)
         )
     else:
-        return List(args.car().eval(env), args.cdr().car().eval(env))
+        return args.cdr().car().eval(env).cons(args.car().eval(env))
 
 
 def eq(env, args):
