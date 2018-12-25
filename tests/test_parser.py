@@ -49,3 +49,35 @@ def test_parser_6():
 
 def test_parser_7():
     assert parse('') == None
+
+
+def test_parser_8():
+    assert parse(
+        "(cons t '(t t))"
+    ) == (
+        L(S('cons'), T, L(S('quote'), L(T, T)))
+    )
+
+
+def test_parser_9():
+    assert parse(
+        "(cons t '((atom ()) (atom t)))"
+    ) == (
+        L(S('cons'), T, L(S('quote'), L(L(S('atom'), L()), L(S('atom'), T))))
+    )
+
+
+def test_parser_10():
+    assert parse(
+        "((()) (() () ((cons () '(() ())))) ())"
+    ) == (
+        L(L(L()), L(L(), L(), L(L(S('cons'), L(), L(S('quote'), L(F, F))))), L())
+    )
+
+
+def test_parser_11():
+    assert parse(
+        "'(t '(t '(() () ()) t))"
+    ) == (
+        L(S('quote'), L(T, L(S('quote'), L(T, L(S('quote'), L(F, F, F)), T))))
+    )

@@ -33,23 +33,36 @@ class Parser:
         if token == ')':
             raise ValueError('Unexpected closing parenthesis')
         elif token == '(':
+            return self.parse_([], self.get_token())
+
+        elif token == "'":
             expr = []
             token = self.get_token()
 
-            while token != ')':
-                if token == '(':
-                    self.index -= 1
-                    expr.append(self.parse())
-                elif token == None:
-                    raise ValueError("Invalid end of expression: ", self.instr)
-                else:
-                    expr.append(token)
-
+            if token != '(':
+                raise ValueError('Expected "(" after quote')
+            else:
                 token = self.get_token()
 
-            return List(*expr)
+            expr = self.parse_([], token)
+
+            return List(Symbol('quote'), List(*expr))
         else:
             return token
+
+    def parse_(self, expr, token):
+        while token != ')':
+            if token in ("'", '('):
+                self.index -= 1
+                expr.append(self.parse())
+            elif token == None:
+                raise ValueError("Invalid end of expression: ", self.instr)
+            else:
+                expr.append(token)
+
+            token = self.get_token()
+
+        return List(*expr)
 
     def get_token(self):
         if self.index >= self.length:
@@ -61,7 +74,7 @@ class Parser:
         if self.index == self.length:
             return None
 
-        elif self.current() in '()':
+        elif self.current() in "'()":
             self.index += 1
             return self.previous()
 
