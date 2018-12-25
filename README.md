@@ -1,4 +1,4 @@
-<img align="left" height="400" src="https://i.imgur.com/5AdZk1U.jpg">
+<img align="left" height="500" src="https://i.imgur.com/5AdZk1U.jpg">
 
 
 # Kite
