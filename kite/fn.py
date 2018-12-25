@@ -4,8 +4,14 @@ from .symbol import F, Symbol, T
 
 class Lambda:
     def __init__(self, symbols, form):
-        self.names = [s.name for s in symbols]
+        self.names = tuple([s.name for s in symbols])
         self.form = form
+
+    def __str__(self):
+        return '(lambda {} {})'.format(
+            ' '.join(self.names),
+            str(self.form)
+        )
 
     def eval(self, env, args):
         if len(args) != len(self.names):

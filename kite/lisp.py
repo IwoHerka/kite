@@ -48,12 +48,17 @@ def repl():
             if len(args) > 1:
                 f = open(args[1], 'r')
                 lines = f.read()
-                sexpr = Parser().parse(lines)
+                parser = Parser()
+                sexpr = parser.parse(lines)
 
-                try:
-                    print(sexpr.eval(env))
-                except Exception as e:
-                    print(e)
+                while sexpr:
+                    try:
+                        sexpr.eval(env)
+                        print('Loaded: {}'.format(sexpr))
+                        sexpr = parser.parse()
+                    except Exception as e:
+                        print(e)
+                        break
             else:
                 raise ValueError(':load requires an argument')
         else:
