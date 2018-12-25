@@ -9,6 +9,7 @@ from .info import *
 from .list import List
 from .parser import Parser
 from .symbol import Symbol, T
+from .files import load_file
 
 
 def repl():
@@ -21,6 +22,12 @@ def repl():
             instr.startswith('?')
             or instr.startswith(':h')
             or instr.startswith(':help')
+        )
+
+    def isload(instr):
+        return (
+            instr.startswith(':l')
+            or instr.startswith(':load')
         )
 
     while 1:
@@ -42,6 +49,20 @@ def repl():
             env.show(exclude=BUILTIN)
         elif instr in (':b', ':builtin'):
             env.show(include=BUILTIN)
+        elif isload(instr):
+            args = instr.split(' ')
+
+            if len(args) > 1:
+                f = open(args[1], 'r')
+                lines = f.read()
+                sexpr = Parser().parse(lines)
+
+                try:
+                    print(sexpr.eval(env))
+                except Exception as e:
+                    print(e)
+            else:
+                raise ValueError(':load requires an argument')
         else:
             sexpr = Parser().parse(instr)
 
