@@ -9,7 +9,6 @@ from .info import *
 from .list import List
 from .parser import Parser
 from .symbol import Symbol, T
-from .files import load_file
 
 
 def repl():
@@ -17,25 +16,19 @@ def repl():
     env = get_environment()
     session = PromptSession(history=FileHistory(HISTORY_FILE))
 
-    def ishelp(instr):
-        return (
-            instr.startswith('?')
-            or instr.startswith(':h')
-            or instr.startswith(':help')
-        )
+    def startswith(instr, strings):
+        for s in strings:
+            if instr.startswith(s):
+                return True
 
-    def isload(instr):
-        return (
-            instr.startswith(':l')
-            or instr.startswith(':load')
-        )
+        return False
 
     while 1:
         instr = read_input(session.prompt)
 
         if instr in (':q', ':quit'):
             break
-        elif ishelp(instr):
+        elif startswith(instr, {'?', ':h', ':help'}):
             args = instr.strip().split(' ')
 
             if len(args) > 1:
@@ -49,7 +42,7 @@ def repl():
             env.show(exclude=BUILTIN)
         elif instr in (':b', ':builtin'):
             env.show(include=BUILTIN)
-        elif isload(instr):
+        elif startswith(instr, {':l', ':load'}):
             args = instr.split(' ')
 
             if len(args) > 1:
