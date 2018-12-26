@@ -5,14 +5,7 @@ from hypothesis.strategies import *
 
 from kite.num import Integer, Float, Rational
 
-
-@composite
-def rationals(draw):
-    return draw(integers()), draw(integers(min_value=1))
-
-@composite
-def floats_(draw):
-    return draw(floats(allow_nan=False, allow_infinity=False))
+from .util import rationals, floats_
 
 
 @given(integers(), floats_())

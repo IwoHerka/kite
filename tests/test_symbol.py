@@ -6,24 +6,7 @@ from hypothesis.strategies import *
 from kite.symbol import Symbol, T, F, NIL
 from kite.list import List
 
-
-@composite
-def anything_except_string(draw):
-    return draw(
-          builds(object)
-        | builds(list)
-        | builds(tuple)
-        | builds(dict)
-        | builds(set)
-        | builds(int)
-        | builds(float)
-    )
-
-
-@composite
-def two_different_names(draw):
-    name = draw(text())
-    return name, name + '.'
+from .util import anything_except_string, two_different_names
 
 
 @given(lists(text(), min_size=1))
