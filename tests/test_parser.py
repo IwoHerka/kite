@@ -1,4 +1,4 @@
-from kite.symbol import T, F, NIL, Symbol as S
+from kite.symbol import T, F, NIL, Symbol as S, String as Str
 from kite.parser import Parser
 from kite.list import List as L
 
@@ -80,4 +80,28 @@ def test_parser_11():
         "'(t '(t '(() () ()) t))"
     ) == (
         L(S('quote'), L(T, L(S('quote'), L(T, L(S('quote'), L(F, F, F)), T))))
+    )
+
+
+def test_parser_12():
+    assert parse("""
+        "string"
+    """) == (
+        Str("string")
+    )
+
+
+def test_parser_13():
+    assert parse("""
+        (cond (f "false") ((atom t) "true"))
+    """) == (
+        L(S('cond'), L(S('f'), Str("false")), L(L(S('atom'), T), Str('true')))
+    )
+
+
+def test_parser_13():
+    assert parse("""
+        (cons "1" '("2" "3"))
+    """) == (
+        L(S('cons'), Str('1'), L(S('quote'), L(Str('2'), Str('3'))))
     )

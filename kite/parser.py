@@ -1,7 +1,8 @@
 import string
 
 from .list import List
-from .symbol import Symbol
+from .symbol import Symbol, String
+from .num import Integer, Float, Rational
 
 SPECIAL = string.whitespace + '()'
 # Occurance of special character
@@ -47,8 +48,22 @@ class Parser:
             expr = self.parse_([], token)
 
             return List(Symbol('quote'), List(*expr))
-        else:
-            return token
+
+        elif isinstance(token, Symbol):
+            if Integer.matches(token.name):
+                return Integer(token.name)
+
+            elif Float.matches(token.name):
+                if token.name[-1] == 'f':
+                    return Float(token.name[:-1])
+                else:
+                    return Float(token.name)
+
+            elif Rational.matches(token.name):
+                numstr, denstr = token.name.split('/')
+                return Rational(int(numstr), int(denstr))
+
+        return token
 
     def parse_(self, expr, token):
         while token != ')':

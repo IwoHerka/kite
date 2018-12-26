@@ -38,8 +38,21 @@ class Symbol(int):
         # look-up of the value it refers to.
         return env.get(self.name)
 
-    def cons(self, arg):
-        return List(arg, self)
+
+class String(str):
+    def __str__(self):
+        return '"{}"'.format(super().__str__())
+
+    def __repr__(self):
+        return self.__str__()
+
+    def eval(self, env, args=None):
+        if args != None:
+            raise TypeError(
+                "Cannot apply '{}' to string '{}'"
+                .format(args, str(self))
+            )
+        return self
 
 
 T = Symbol('t')
