@@ -75,17 +75,19 @@ class Parser:
                 raise ValueError("Invalid end of expression: ", self.instr)
             else:
                 if isinstance(token, Symbol):
-                    if Integer.matches(token.name):
-                        token = Integer(token.name)
+                    strval = str(token)
 
-                    elif Float.matches(token.name):
-                        if token.name[-1] == 'f':
-                            token = Float(token.name[:-1])
+                    if Integer.matches(strval):
+                        token = Integer(strval)
+
+                    elif Float.matches(strval):
+                        if strval[-1] == 'f':
+                            token = Float(strval[:-1])
                         else:
-                            token = Float(token.name)
+                            token = Float(strval)
 
-                    elif Rational.matches(token.name):
-                        numstr, denstr = token.name.split('/')
+                    elif Rational.matches(strval):
+                        numstr, denstr = strval.split('/')
                         token = Rational(int(numstr), int(denstr))
 
                 expr.append(token)

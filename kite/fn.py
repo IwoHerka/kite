@@ -157,12 +157,8 @@ def add(env, args):
     lhs = args.car().eval(env)
     rhs = args.cdr().car().eval(env)
 
-    if (
-        isinstance(lhs, (Integer, Float, Rational))
-        and isinstance(lhs, (Integer, Float, Rational))
-    ):
-        return lhs.add(rhs)
-    else:
-        raise TypeError()
+    for arg in args:
+        if not isinstance(lhs, (Integer, Float, Rational)):
+            raise TypeError()
 
-
+    return Integer(0).add(*args)
