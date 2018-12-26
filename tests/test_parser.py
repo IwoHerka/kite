@@ -1,6 +1,7 @@
 from kite.symbol import T, F, NIL, Symbol as S, String as Str
 from kite.parser import Parser
 from kite.list import List as L
+from kite.num import Integer as I, Float as Fl, Rational as R
 
 
 def parse(string):
@@ -27,7 +28,7 @@ def test_parser_3():
     assert parse(
         '(quote () ((1 2)) (atom (t (t f))))'
     ) == (
-        L(S('quote'), L(), L(L(S('1'), S('2'))), L(S('atom'), L(S('t'), L(S('t'), S('f')))))
+        L(S('quote'), L(), L(L(I(1), I(2))), L(S('atom'), L(S('t'), L(S('t'), S('f')))))
     )
 
 
@@ -104,4 +105,12 @@ def test_parser_13():
         (cons "1" '("2" "3"))
     """) == (
         L(S('cons'), Str('1'), L(S('quote'), L(Str('2'), Str('3'))))
+    )
+
+
+def test_parser_14():
+    assert parse("""
+        (+ 1 2)
+    """) == (
+        L(S('+'), I(1), I(2))
     )

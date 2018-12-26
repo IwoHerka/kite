@@ -1,5 +1,6 @@
 from .list import List
 from .symbol import F, Symbol, T
+from .num import Integer, Float, Rational
 
 
 class Lambda:
@@ -150,3 +151,18 @@ def label(env, args):
         name = args.car().name
         env.set(name, args.cdr().car().eval(env))
         return env.get(name)
+
+
+def add(env, args):
+    lhs = args.car().eval(env)
+    rhs = args.cdr().car().eval(env)
+
+    if (
+        isinstance(lhs, (Integer, Float, Rational))
+        and isinstance(lhs, (Integer, Float, Rational))
+    ):
+        return lhs.add(rhs)
+    else:
+        raise TypeError()
+
+

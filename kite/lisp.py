@@ -4,7 +4,8 @@ from prompt_toolkit import PromptSession
 from prompt_toolkit.history import FileHistory
 
 from .env import Environment
-from .fn import Function, atom, car, cdr, cond, cons, eq, label, lambda_, quote
+from .fn import (Function, add, atom, car, cdr, cond, cons, eq, label, lambda_,
+                 quote)
 from .info import *
 from .list import List
 from .parser import Parser
@@ -107,6 +108,7 @@ def get_environment():
         'label':  Function(label),
         'cond':   Function(cond),
         'lambda': Function(lambda_),
+        '+':      Function(add),
         't':      Symbol('t'),
         'f':      List(),
         'nil':    List()

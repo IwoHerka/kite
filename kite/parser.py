@@ -33,6 +33,7 @@ class Parser:
 
         if token == ')':
             raise ValueError('Unexpected closing parenthesis')
+
         elif token == '(':
             return self.parse_([], self.get_token())
 
@@ -73,6 +74,20 @@ class Parser:
             elif token == None:
                 raise ValueError("Invalid end of expression: ", self.instr)
             else:
+                if isinstance(token, Symbol):
+                    if Integer.matches(token.name):
+                        token = Integer(token.name)
+
+                    elif Float.matches(token.name):
+                        if token.name[-1] == 'f':
+                            token = Float(token.name[:-1])
+                        else:
+                            token = Float(token.name)
+
+                    elif Rational.matches(token.name):
+                        numstr, denstr = token.name.split('/')
+                        token = Rational(int(numstr), int(denstr))
+
                 expr.append(token)
 
             token = self.get_token()
