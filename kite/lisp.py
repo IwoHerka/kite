@@ -110,6 +110,6 @@ def get_environment():
         'lambda': Function(lambda_),
         '+':      Function(add),
         't':      Symbol('t'),
-        'f':      List(),
+        'f':      Symbol('f'),
         'nil':    List()
     })

@@ -21,15 +21,16 @@ class Lambda:
                 .format(len(self.names), len(args))
             )
 
-        bindings = dict(zip(self.names, args))
-        env.push(bindings)
-        retval = F
-
-        for f in self.form:
-            retval = f.eval(env)
-
+        self._bind(env, args)
+        retval = self.form.eval(env)
         env.pop()
+
         return retval
+
+    def _bind(self, env, args):
+        evaluated = map(lambda a: a.eval(env), args.data)
+        bindings = dict(zip(self.names, evaluated))
+        env.push(bindings)
 
 
 class Function:
@@ -103,13 +104,7 @@ def eq(env, args):
     lhs = args.car().eval(env)
     rhs = args.cdr().car().eval(env)
 
-    if not (type(lhs) is Symbol and (type(rhs) is Symbol or rhs == F)):
-        raise TypeError(
-            "Function 'eq' if defined only for symbols, got: {}, {}"
-            .format(lhs, rhs)
-        )
-    else:
-        return T if lhs == rhs else F
+    return T if lhs == rhs else F
 
 
 def quote(env, args):

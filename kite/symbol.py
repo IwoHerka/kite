@@ -56,5 +56,5 @@ class String(str):
 
 
 T = Symbol('t')
-F = List()
+F = Symbol('f')
 NIL = Symbol('NIL')
