@@ -15,7 +15,7 @@ from .symbol import Symbol, T
 def repl():
     """Start REPL."""
     env = get_environment()
-    session = PromptSession(history=FileHistory(HISTORY_FILE))
+    session = PromptSession()
 
     def startswith(instr, strings):
         for s in strings:
